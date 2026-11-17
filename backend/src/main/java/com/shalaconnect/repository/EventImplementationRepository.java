@@ -1,0 +1,32 @@
+package com.shalaconnect.repository;
+
+import com.shalaconnect.model.EventImplementation;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface EventImplementationRepository extends JpaRepository<EventImplementation, Long> {
+
+    // For list view — fetch all associations and photos (DISTINCT avoids duplicates from collection join)
+    @Query("SELECT DISTINCT i FROM EventImplementation i LEFT JOIN FETCH i.event LEFT JOIN FETCH i.school LEFT JOIN FETCH i.submittedBy LEFT JOIN FETCH i.photoPaths WHERE i.event.id = :eventId")
+    List<EventImplementation> findByEventId(@Param("eventId") Long eventId);
+
+    // For single entity by event and school — fetch all associations and photos
+    @Query("SELECT DISTINCT i FROM EventImplementation i LEFT JOIN FETCH i.event LEFT JOIN FETCH i.school LEFT JOIN FETCH i.submittedBy LEFT JOIN FETCH i.photoPaths WHERE i.event.id = :eventId AND i.school.id = :schoolId")
+    Optional<EventImplementation> findByEventIdAndSchoolId(@Param("eventId") Long eventId, @Param("schoolId") Long schoolId);
+
+    // Fetch implementation by ID with all associations and photoPaths
+    @Query("SELECT DISTINCT i FROM EventImplementation i LEFT JOIN FETCH i.event LEFT JOIN FETCH i.school LEFT JOIN FETCH i.submittedBy LEFT JOIN FETCH i.photoPaths WHERE i.id = :id")
+    Optional<EventImplementation> findByIdWithPhotos(@Param("id") Long id);
+
+    // Fetch all implementations for a school with photos
+    @Query("SELECT DISTINCT i FROM EventImplementation i LEFT JOIN FETCH i.event LEFT JOIN FETCH i.school LEFT JOIN FETCH i.submittedBy LEFT JOIN FETCH i.photoPaths WHERE i.school.id = :schoolId ORDER BY i.createdAt DESC")
+    List<EventImplementation> findBySchoolIdWithPhotos(@Param("schoolId") Long schoolId);
+
+    List<EventImplementation> findBySubmittedById(Long userId);
+}

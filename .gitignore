@@ -1,0 +1,68 @@
+# Root .gitignore
+
+# Environment files — NEVER commit these
+.env
+.env.local
+backend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# Build outputs
+backend/target/
+frontend/dist/
+frontend/node_modules/
+
+# Uploads directory
+backend/uploads/
+uploads/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.suo
+*.user
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local scripts
+*.bat
+*.pem
+userdata.sh
+
+# Architecture files
+architecture.drawio
+
+# Binary build artifacts & archives
+*.jar
+*.war
+*.zip
+*.tar.gz
+
+# Reports, documents, and screenshots
+*.docx
+*.pdf
+screenshots/
+**/screenshots/
+execution_evidence/
+**/execution_evidence/
+test_*.png
+test_*.pdf
+
+# Logs
+*.log
+logs/
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
