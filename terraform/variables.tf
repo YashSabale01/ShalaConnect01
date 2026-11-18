@@ -56,12 +56,14 @@ variable "db_password" {
   description = "PostgreSQL Master Password (store securely in SSM/Secrets Manager)"
   type        = string
   sensitive   = true
+  default     = "ShalaConnectDefault2026!"
 }
 
 variable "jwt_secret" {
   description = "Application JWT Secret Key (min 32 chars)"
   type        = string
   sensitive   = true
+  default     = "replace_with_a_very_long_secure_random_jwt_secret_key_at_least_32_chars"
 }
 
 variable "admin_email" {
@@ -74,6 +76,7 @@ variable "admin_password" {
   description = "Default cluster admin password"
   type        = string
   sensitive   = true
+  default     = "AdminSecurePassword@2026!"
 }
 
 variable "backend_image" {

@@ -42,3 +42,13 @@ output "ecr_repository_url" {
   description = "Amazon ECR Repository URL for Backend Docker Image"
   value       = aws_ecr_repository.backend.repository_url
 }
+
+output "ec2_instance_id" {
+  description = "ShalaConnect EC2 Instance ID"
+  value       = aws_instance.app_server.id
+}
+
+output "ec2_instance_public_ip" {
+  description = "Public IP address of the ShalaConnect application server"
+  value       = aws_instance.app_server.public_ip
+}
