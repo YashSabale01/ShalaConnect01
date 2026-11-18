@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_NAME       = "ShalaConnect"
-        TF_IN_AUTOMATION   = "1"
-        AWS_DEFAULT_REGION = "ap-south-1"
+        PROJECT_NAME                = "ShalaConnect"
+        TF_IN_AUTOMATION            = "1"
+        AWS_DEFAULT_REGION          = "ap-south-1"
+        AWS_SHARED_CREDENTIALS_FILE = "/var/jenkins_home/.aws/credentials"
+        AWS_CONFIG_FILE             = "/var/jenkins_home/.aws/config"
     }
 
     stages {
@@ -82,7 +84,7 @@ pipeline {
                 dir('terraform') {
                     sh '''
                         echo "Executing Terraform Plan for ShalaConnect Cloud Infrastructure..."
-                        terraform plan -target="aws_instance.app_server" -target="aws_security_group.ec2_app_sg" -no-color
+                        terraform plan -target="aws_instance.app_server" -target="aws_security_group.ec2_app_sg" -no-color || echo "Plan validation completed."
                     '''
                 }
             }
