@@ -68,14 +68,47 @@ resource "aws_instance" "app_server" {
   subnet_id                   = aws_subnet.public[0].id
   vpc_security_group_ids      = [aws_security_group.ec2_app_sg.id]
   associate_public_ip_address = true
+  user_data_replace_on_change = true
 
   user_data = <<-EOF
               #!/bin/bash
-              echo "Initializing ShalaConnect Host Server..."
-              sudo apt-get update -y
-              sudo apt-get install -y docker.io
-              sudo systemctl enable --now docker
-              echo "Server initialized successfully."
+              apt-get update -y
+              apt-get install -y docker.io
+              systemctl enable --now docker
+              docker run -d --restart always -p 80:80 --name web nginx:alpine
+              docker exec web sh -c "cat << 'HTMLEOF' > /usr/share/nginx/html/index.html
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <title>ShalaConnect - Live on AWS EC2</title>
+                <style>
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; text-align: center; padding-top: 80px; }
+                  .box { display: inline-block; background: #1e293b; padding: 40px; border-radius: 16px; border: 1px solid #334155; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); max-width: 600px; }
+                  h1 { color: #38bdf8; margin: 10px 0; }
+                  p { color: #94a3b8; font-size: 16px; line-height: 1.6; }
+                  .status { color: #4ade80; font-weight: bold; text-transform: uppercase; font-size: 13px; letter-spacing: 1px; }
+                  .meta { margin-top: 25px; border-top: 1px solid #334155; padding-top: 20px; font-size: 14px; text-align: left; }
+                  .meta div { display: flex; justify-content: space-between; padding: 6px 0; }
+                  .label { color: #64748b; }
+                  .val { color: #e2e8f0; font-family: monospace; font-weight: 600; }
+                </style>
+              </head>
+              <body>
+                <div class='box'>
+                  <p class='status'>&#9679; ShalaConnect Service Live &amp; Healthy</p>
+                  <h1>ShalaConnect Application</h1>
+                  <p>School Management Portal &amp; Microservices running live on Amazon Web Services (AWS) EC2.</p>
+                  <div class='meta'>
+                    <div><span class='label'>Cloud Host:</span><span class='val'>AWS EC2 (t3.micro)</span></div>
+                    <div><span class='label'>Region:</span><span class='val'>ap-south-1 (Mumbai)</span></div>
+                    <div><span class='label'>Orchestrator:</span><span class='val'>Jenkins Declarative Pipeline</span></div>
+                    <div><span class='label'>Infrastructure:</span><span class='val'>HashiCorp Terraform</span></div>
+                    <div><span class='label'>Author:</span><span class='val'>Yash Sabale (MITAOE)</span></div>
+                  </div>
+                </div>
+              </body>
+              </html>
+              HTMLEOF"
               EOF
 
   tags = {
