@@ -1,57 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud-native-deployment
+  name: shalaconnect
   labels:
-    app: cloud-native-app
-    tier: frontend
+    app: shalaconnect
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: cloud-native-app
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+      app: shalaconnect
   template:
     metadata:
       labels:
-        app: cloud-native-app
+        app: shalaconnect
     spec:
       containers:
-        - name: web-container
-          image: cloud-native-app:v1
+        - name: shalaconnect
+          image: shalaconnect:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
-              name: http
-          env:
-            - name: APP_ENV
-              value: "Kubernetes-Production"
-            - name: PORT
-              value: "5000"
-          resources:
-            requests:
-              memory: "64Mi"
-              cpu: "100m"
-            limits:
-              memory: "128Mi"
-              cpu: "250m"
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /health
               port: 5000
             initialDelaySeconds: 10
             periodSeconds: 15
-            timeoutSeconds: 3
-            failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /health
               port: 5000
             initialDelaySeconds: 5
             periodSeconds: 10
-            timeoutSeconds: 2
-            failureThreshold: 2
