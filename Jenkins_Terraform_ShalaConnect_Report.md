@@ -10,8 +10,8 @@
 | **Project Application** | ShalaConnect (School Management System) |
 | **Cloud Provider** | Amazon Web Services (AWS) – `ap-south-1` (Mumbai) |
 | **AWS Account ID** | `351245513808` |
-| **Live EC2 Instance ID** | `i-0a560d88a34888e39` |
-| **Live Public IP Address** | `13.233.77.225` |
+| **Live EC2 Instance ID** | `i-00b41e1e0a105f117` |
+| **Live Public IP Address** | `65.1.186.81` (Permanent Elastic IP) |
 
 ---
 
