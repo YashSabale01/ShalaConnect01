@@ -161,6 +161,8 @@ resource "aws_instance" "app_server" {
                 -e DB_USERNAME=postgres \
                 -e DB_PASSWORD=postgres \
                 -e DDL_AUTO=update \
+                -e ADMIN_EMAIL="admin@shalaconnect.in" \
+                -e ADMIN_PASSWORD="Admin@123" \
                 -e JWT_SECRET="shalaconnect_super_secret_jwt_key_must_be_at_least_32_chars_long!!" \
                 -e ALLOWED_ORIGINS="*" \
                 $REGISTRY/shalaconnect-backend:latest
@@ -178,5 +180,15 @@ resource "aws_instance" "app_server" {
     Name        = "${var.project_name}-${var.environment}-app-server"
     Application = "ShalaConnect"
     Role        = "FullStack-SpringBoot-React-Server"
+  }
+}
+
+# Allocate a permanent Elastic IP so the public address stays static across reboots
+resource "aws_eip" "app_eip" {
+  instance = aws_instance.app_server.id
+  domain   = "vpc"
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-eip"
   }
 }

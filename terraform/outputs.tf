@@ -50,5 +50,5 @@ output "ec2_instance_id" {
 
 output "ec2_instance_public_ip" {
   description = "Public IP address of the ShalaConnect application server"
-  value       = aws_instance.app_server.public_ip
+  value       = aws_eip.app_eip.public_ip
 }
